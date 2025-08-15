@@ -1,0 +1,1658 @@
+
+
+
+<div class="ascend-performance-card-v4">
+    <!-- Enhanced Header with game mode switching -->
+    <div class="ascend-header-v4">
+        <div class="ascend-player-info-v4">
+            <div class="ascend-avatar-container-v4">
+                <img src="{{ player.minecraft_skin_url }}" alt="{{ player.nickname }}" class="ascend-avatar-v4">
+                <div class="ascend-avatar-glow-v4"></div>
+                <div class="ascend-level-badge">{{ player.level }}</div>
+            </div>
+            <div class="ascend-player-details-v4">
+                <h3 class="ascend-nickname-v4">{{ player.nickname }}</h3>
+                <div class="ascend-tier-badge-v4" id="overall-tier-badge-v4">
+                    <span class="tier-rank-v4 tier-d" id="overall-tier-text-v4">D TIER</span>
+                    <div class="tier-particles"></div>
+                </div>
+                <div class="ascend-gamemode-v4">
+                    <span class="gamemode-label">GAME MODE</span>
+                    <div class="gamemode-selector">
+                        <select id="gamemode-select" class="form-select gamemode-select-input">
+                            <option value="bedwars" selected>Bedwars</option>
+                            <option value="kitpvp">KitPVP</option>
+                            <option value="skywars">SkyWars</option>
+                            <option value="bridgefight">BridgeFight</option>
+                            <option value="sumo">Sumo</option>
+                            <option value="fireballfight">Fireball Fight</option>
+                            <option value="bridge">Bridge</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="ascend-rank-progress">
+                    <div class="rank-progress-bar">
+                        <div class="rank-progress-fill" id="rank-progress"></div>
+                    </div>
+                    <span class="rank-progress-text">Progress to next tier</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Enhanced Performance summary with Global Rank -->
+        <div class="ascend-summary-v4">
+            <div class="summary-item-v4">
+                <div class="summary-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <span class="summary-label">AVERAGE SCORE</span>
+                <span class="summary-value" id="average-score-v4">25</span>
+                <div class="summary-trend" id="score-trend">
+                    <i class="fas fa-arrow-up text-success"></i>
+                    <span>+5</span>
+                </div>
+            </div>
+            <div class="summary-item-v4">
+                <div class="summary-icon">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <span class="summary-label">GLOBAL RANK</span>
+                <span class="summary-value" id="global-rank-v4">#---</span>
+                <div class="rank-change" id="rank-change">
+                    <i class="fas fa-equals text-muted"></i>
+                    <span>--</span>
+                </div>
+            </div>
+            <div class="summary-item-v4">
+                <div class="summary-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <span class="summary-label">LAST UPDATED</span>
+                <span class="summary-value" id="last-updated-v4">N/A</span>
+                <div class="summary-status" id="update-status">
+                    <span class="status-dot status-active"></span>
+                    <span>Recent</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Stats section with game mode specific stats -->
+    <div class="ascend-stats-section-v4">
+        <div class="stats-header">
+            <h4 id="stats-title">Performance Breakdown</h4>
+            <div class="stats-view-toggle">
+                <button class="view-btn active" data-view="detailed">
+                    <i class="fas fa-list"></i>
+                </button>
+                <button class="view-btn" data-view="radar">
+                    <i class="fas fa-chart-area"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="ascend-stats-grid-v4" id="ascend-stats-container-v4">
+            <!-- Will be populated by JavaScript -->
+        </div>
+        
+        <div class="ascend-radar-chart-v4" id="ascend-radar-container" style="display: none;">
+            <canvas id="ascend-radar-canvas"></canvas>
+        </div>
+    </div>
+
+    <!-- Enhanced Comment section with evaluation rating -->
+    <div class="ascend-comment-section-v4">
+        <div class="comment-header-v4">
+            <div class="comment-title">
+                <span class="comment-label">ASCEND EVALUATION</span>
+                <div class="evaluation-rating" id="evaluation-rating">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="far fa-star"></i>
+                        <i class="far fa-star"></i>
+                    </div>
+                    <span class="rating-text">3.0/5.0</span>
+                </div>
+            </div>
+            <div class="comment-icon-v4">
+                <i class="fas fa-quote-left"></i>
+            </div>
+        </div>
+        
+        <div class="comment-tags" id="performance-tags">
+            <span class="performance-tag tag-strength">Aggressive</span>
+            <span class="performance-tag tag-neutral">Consistent</span>
+            <span class="performance-tag tag-weakness">Needs Work: Defense</span>
+        </div>
+        
+        <div class="comment-text-v4" id="ascend-comment-v4">
+            <div class="loading-placeholder-v4">
+                <div class="loading-bar-v4"></div>
+                <div class="loading-bar-v4"></div>
+                <div class="loading-bar-v4"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Footer with evaluator and history -->
+    <div class="ascend-footer-v4">
+        <div class="evaluator-section">
+            <div class="evaluator-info-v4">
+                <span class="evaluator-label">EVALUATED BY</span>
+                <div class="evaluator-details-v4">
+                    <div class="evaluator-avatar-container-v4">
+                        <img src="https://mc-heads.net/avatar/EliteSquad/24" alt="Elite Squad" class="evaluator-avatar-v4" id="evaluator-avatar-v4">
+                        <div class="evaluator-status-dot"></div>
+                    </div>
+                    <div class="evaluator-text">
+                        <span class="evaluator-name" id="ascend-evaluator-v4">Elite Squad</span>
+                        <span class="evaluator-role">Senior Analyst</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="evaluation-stats">
+                <div class="eval-stat">
+                    <span class="eval-stat-value" id="total-evaluations">12</span>
+                    <span class="eval-stat-label">Evaluations</span>
+                </div>
+                <div class="eval-stat">
+                    <span class="eval-stat-value" id="evaluation-accuracy">94%</span>
+                    <span class="eval-stat-label">Accuracy</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tier-history-v4">
+            <span class="tier-label">TIER HISTORY</span>
+            <div class="tier-timeline" id="tier-timeline">
+                <div class="tier-point current" data-tier="D">D</div>
+                <div class="tier-line"></div>
+                <div class="tier-point previous" data-tier="D">D</div>
+                <div class="tier-line"></div>
+                <div class="tier-point older" data-tier="C">C</div>
+            </div>
+        </div>
+        
+        <div class="ascend-actions-v4">
+            <button class="btn btn-sm btn-outline-warning" onclick="showASCENDHistoryV4()" title="Detailed History">
+                <i class="fas fa-history"></i>
+                <span>History</span>
+            </button>
+            <button class="btn btn-sm btn-outline-info" onclick="exportASCENDData()" title="Export Data">
+                <i class="fas fa-download"></i>
+                <span>Export</span>
+            </button>
+            {% if is_admin %}
+            <button class="btn btn-sm btn-outline-success" onclick="editASCENDDataV4()" title="Edit Evaluation">
+                <i class="fas fa-edit"></i>
+                <span>Edit</span>
+            </button>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Enhanced Branding with v4.0 info -->
+    <div class="ascend-branding-v4">
+        <div class="brand-logo-v4">
+            <div class="logo-circle-v4">
+                <i class="fas fa-arrow-up"></i>
+            </div>
+            <div class="brand-text">
+                <span class="brand-name">Elite Squad ASCEND</span>
+                <span class="brand-tagline">Advanced Combat & Strategy Evaluation Network Database</span>
+            </div>
+        </div>
+        <div class="brand-info-v4">
+            <div class="version-info">
+                <span class="brand-version">v4.0</span>
+                <span class="version-badge version-major">MAJOR</span>
+            </div>
+            <span class="brand-link">elite-squad.bedwars</span>
+            <div class="powered-by">
+                <span>Powered by AI Analytics</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Enhanced ASCEND History Modal v4.0 -->
+<div class="modal fade" id="ascendHistoryModalV4" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content bg-dark text-white">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title">
+                    <i class="fas fa-history text-warning me-2"></i>ASCEND Evaluation History v4.0
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="history-filters mb-4">
+                    <div class="filter-row">
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-outline-primary active" data-filter="all">All Changes</button>
+                            <button type="button" class="btn btn-outline-success" data-filter="improvements">Improvements</button>
+                            <button type="button" class="btn btn-outline-danger" data-filter="downgrades">Downgrades</button>
+                            <button type="button" class="btn btn-outline-warning" data-filter="rank-changes">Rank Changes</button>
+                        </div>
+                        <select class="form-select ms-3" style="width: auto;" id="timeframe-filter">
+                            <option value="7">Last 7 days</option>
+                            <option value="30" selected>Last 30 days</option>
+                            <option value="90">Last 3 months</option>
+                            <option value="365">Last year</option>
+                            <option value="all">All time</option>
+                        </select>
+                    </div>
+                    <div class="filter-stats mt-2">
+                        <small class="text-muted">
+                            <span id="history-count">0</span> evaluations found |
+                            <span id="avg-improvement" class="text-success">+2.5</span> avg. improvement |
+                            <span id="peak-rank" class="text-warning">Peak: A+</span>
+                        </small>
+                    </div>
+                </div>
+                <div id="ascendHistoryContentV4">
+                    <div class="text-center text-muted">
+                        <i class="fas fa-spinner fa-spin fa-2x mb-3"></i>
+                        <p>Loading evaluation history...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Game mode configurations
+const GAME_MODE_CONFIGS = {
+    bedwars: {
+        name: 'Bedwars',
+        icon: 'fas fa-bed',
+        stats: [
+            { name: 'PVP', icon: 'fas fa-sword', color: '#e74c3c', description: 'Combat effectiveness and dueling skills' },
+            { name: 'CLUTCHING', icon: 'fas fa-fire', color: '#f39c12', description: 'Performance under pressure situations' },
+            { name: 'BLOCK PLACEMENT', icon: 'fas fa-cube', color: '#3498db', description: 'Strategic building and defensive positioning' },
+            { name: 'GAMESENSE', icon: 'fas fa-brain', color: '#9b59b6', description: 'Game awareness and tactical decision making' }
+        ]
+    },
+    kitpvp: {
+        name: 'KitPVP',
+        icon: 'fas fa-fist-raised',
+        stats: [
+            { name: 'AIMING', icon: 'fas fa-crosshairs', color: '#e74c3c', description: 'Accuracy and precision in combat' },
+            { name: 'HEALING', icon: 'fas fa-heart', color: '#27ae60', description: 'Soup and potion healing efficiency' },
+            { name: 'MOVEMENT', icon: 'fas fa-running', color: '#3498db', description: 'Strafing and positioning skills' },
+            { name: 'SPACING', icon: 'fas fa-arrows-alt', color: '#9b59b6', description: 'Distance management in fights' }
+        ]
+    },
+    skywars: {
+        name: 'SkyWars',
+        icon: 'fas fa-cloud',
+        stats: [
+            { name: 'LOOTING', icon: 'fas fa-search', color: '#f39c12', description: 'Chest route optimization and item management' },
+            { name: 'POTTING', icon: 'fas fa-flask', color: '#27ae60', description: 'Potion usage and healing efficiency' },
+            { name: 'PEARLING', icon: 'fas fa-gem', color: '#9b59b6', description: 'Ender pearl accuracy and timing' },
+            { name: 'MELEE', icon: 'fas fa-sword', color: '#e74c3c', description: 'Close combat and sword fighting' }
+        ]
+    },
+    bridgefight: {
+        name: 'BridgeFight',
+        icon: 'fas fa-bridge',
+        stats: [
+            { name: 'BLOCK EDITS', icon: 'fas fa-edit', color: '#3498db', description: 'Block manipulation and editing speed' },
+            { name: 'BRIDGE FIGHTS', icon: 'fas fa-bridge', color: '#f39c12', description: 'Bridge combat positioning' },
+            { name: 'GAMESENSE', icon: 'fas fa-brain', color: '#9b59b6', description: 'Strategic awareness and timing' },
+            { name: 'PVP', icon: 'fas fa-sword', color: '#e74c3c', description: 'Combat effectiveness on bridges' }
+        ]
+    },
+    sumo: {
+        name: 'Sumo',
+        icon: 'fas fa-hand-paper',
+        stats: [
+            { name: 'GAMESENSE', icon: 'fas fa-brain', color: '#9b59b6', description: 'Ring positioning and awareness' },
+            { name: 'KB CONTROL', icon: 'fas fa-fist-raised', color: '#e74c3c', description: 'Knockback timing and direction' },
+            { name: 'MECHANICS', icon: 'fas fa-cogs', color: '#34495e', description: 'Technical execution and consistency' },
+            { name: 'MOVEMENT', icon: 'fas fa-running', color: '#3498db', description: 'Footwork and evasion skills' }
+        ]
+    },
+    fireballfight: {
+        name: 'Fireball Fight',
+        icon: 'fas fa-fire-alt',
+        stats: [
+            { name: 'ATTACK/DEFENSE', icon: 'fas fa-shield-alt', color: '#e67e22', description: 'Offensive and defensive balance' },
+            { name: 'FIREBALL USAGE', icon: 'fas fa-fire-alt', color: '#e74c3c', description: 'Fireball accuracy and timing' },
+            { name: 'GAMESENSE', icon: 'fas fa-brain', color: '#9b59b6', description: 'Tactical awareness in combat' },
+            { name: 'PVP', icon: 'fas fa-sword', color: '#c0392b', description: 'Close quarters combat skills' }
+        ]
+    },
+    bridge: {
+        name: 'Bridge',
+        icon: 'fas fa-road',
+        stats: [
+            { name: 'BYPASSING', icon: 'fas fa-running', color: '#3498db', description: 'Speed bridging and evasion' },
+            { name: 'DEFENSE', icon: 'fas fa-shield-alt', color: '#27ae60', description: 'Defensive positioning and blocks' },
+            { name: 'GAMESENSE', icon: 'fas fa-brain', color: '#9b59b6', description: 'Strategic decision making' },
+            { name: 'PVP', icon: 'fas fa-sword', color: '#e74c3c', description: 'Combat on narrow bridges' }
+        ]
+    }
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+    const playerId = {{ player.id }};
+    const gameModeSelect = document.getElementById('gamemode-select');
+    
+    // Initialize with current game mode
+    loadASCENDDataV4(playerId, 'bedwars');
+    
+    // Handle game mode switching
+    if (gameModeSelect) {
+        gameModeSelect.addEventListener('change', function() {
+            const selectedMode = this.value;
+            loadASCENDDataV4(playerId, selectedMode);
+            updateStatsForGameMode(selectedMode);
+        });
+    }
+    
+    // Listen for ASCEND updates from admin panel
+    window.addEventListener('ascend-updated', function() {
+        const currentMode = gameModeSelect ? gameModeSelect.value : 'bedwars';
+        setTimeout(() => loadASCENDDataV4(playerId, currentMode), 500);
+    });
+    
+    // Initialize tooltips and view toggle
+    initializeTooltipsV4();
+    initializeViewToggleV4();
+});
+
+function loadASCENDDataV4(playerId, gameMode = 'bedwars') {
+    console.log('🎯 Loading ASCEND v4.0 data for player:', playerId, 'mode:', gameMode);
+    
+    showLoadingStateV4();
+    
+    fetch(`/api/player/${playerId}/ascend-data?gamemode=${gameMode}&t=${Date.now()}`, {
+        method: 'GET',
+        headers: {
+            'Cache-Control': 'no-cache',
+            'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('🎯 ASCEND v4.0 API response:', data);
+        if (data && data.success && data.ascend) {
+            updateASCENDCardV4(data.ascend, gameMode);
+        } else {
+            console.warn('⚠️ No ASCEND data available, showing default');
+            showDefaultASCENDDataV4(gameMode);
+        }
+    })
+    .catch(error => {
+        console.error('❌ Error loading ASCEND data:', error);
+        showDefaultASCENDDataV4(gameMode);
+    });
+}
+
+function updateStatsForGameMode(gameMode) {
+    const config = GAME_MODE_CONFIGS[gameMode];
+    if (!config) return;
+    
+    // Update stats title
+    const statsTitle = document.getElementById('stats-title');
+    if (statsTitle) {
+        statsTitle.innerHTML = `<i class="${config.icon} me-2"></i>${config.name} Performance`;
+    }
+}
+
+function showLoadingStateV4() {
+    const statsContainer = document.getElementById('ascend-stats-container-v4');
+    if (statsContainer) {
+        statsContainer.innerHTML = `
+            <div class="ascend-stat-row-v4 loading">
+                <div class="stat-icon-skeleton"></div>
+                <div class="stat-content-skeleton">
+                    <div class="stat-name-skeleton"></div>
+                    <div class="stat-bar-skeleton"></div>
+                </div>
+                <div class="stat-value-skeleton"></div>
+            </div>
+            <div class="ascend-stat-row-v4 loading">
+                <div class="stat-icon-skeleton"></div>
+                <div class="stat-content-skeleton">
+                    <div class="stat-name-skeleton"></div>
+                    <div class="stat-bar-skeleton"></div>
+                </div>
+                <div class="stat-value-skeleton"></div>
+            </div>
+            <div class="ascend-stat-row-v4 loading">
+                <div class="stat-icon-skeleton"></div>
+                <div class="stat-content-skeleton">
+                    <div class="stat-name-skeleton"></div>
+                    <div class="stat-bar-skeleton"></div>
+                </div>
+                <div class="stat-value-skeleton"></div>
+            </div>
+            <div class="ascend-stat-row-v4 loading">
+                <div class="stat-icon-skeleton"></div>
+                <div class="stat-content-skeleton">
+                    <div class="stat-name-skeleton"></div>
+                    <div class="stat-bar-skeleton"></div>
+                </div>
+                <div class="stat-value-skeleton"></div>
+            </div>
+        `;
+    }
+}
+
+function updateASCENDCardV4(ascendData, gameMode = 'bedwars') {
+    console.log('🎯 Updating ASCEND v4.0 card with data:', ascendData, 'mode:', gameMode);
+    
+    const config = GAME_MODE_CONFIGS[gameMode];
+    const stats = config.stats;
+    
+    const statsContainer = document.getElementById('ascend-stats-container-v4');
+    const commentElement = document.getElementById('ascend-comment-v4');
+    const evaluatorElement = document.getElementById('ascend-evaluator-v4');
+    const averageScoreElement = document.getElementById('average-score-v4');
+    const lastUpdatedElement = document.getElementById('last-updated-v4');
+    const globalRankElement = document.getElementById('global-rank-v4');
+    
+    // Get stat values based on game mode or use defaults
+    const statValues = getStatValuesForGameMode(ascendData, gameMode);
+    const avgScore = Math.round(statValues.reduce((sum, val) => sum + val, 0) / statValues.length);
+    
+    // Update average score with enhanced styling
+    if (averageScoreElement) {
+        averageScoreElement.textContent = avgScore;
+        averageScoreElement.className = `summary-value tier-${getTierClassV4(avgScore)}`;
+        
+        // Show trend with improved calculation
+        const trendElement = document.getElementById('score-trend');
+        if (trendElement) {
+            const trendValue = calculateTrend(ascendData);
+            trendElement.innerHTML = `
+                <i class="fas fa-arrow-${trendValue >= 0 ? 'up text-success' : 'down text-danger'}"></i>
+                <span>${trendValue >= 0 ? '+' : ''}${trendValue}</span>
+            `;
+        }
+    }
+    
+    // Update global rank with enhanced display
+    if (globalRankElement) {
+        const globalRank = calculateGlobalRank(avgScore);
+        globalRankElement.textContent = `#${globalRank}`;
+        globalRankElement.className = `summary-value rank-${getRankClass(globalRank)}`;
+        
+        // Update rank change
+        const rankChangeElement = document.getElementById('rank-change');
+        if (rankChangeElement) {
+            const rankChange = calculateRankChange(ascendData);
+            const changeIcon = rankChange > 0 ? 'up text-success' : rankChange < 0 ? 'down text-danger' : 'equals text-muted';
+            rankChangeElement.innerHTML = `
+                <i class="fas fa-arrow-${changeIcon.split(' ')[0]}"></i>
+                <span>${rankChange > 0 ? '+' : ''}${rankChange || '--'}</span>
+            `;
+        }
+    }
+    
+    // Update last updated
+    if (lastUpdatedElement && ascendData.updated_at) {
+        const date = new Date(ascendData.updated_at);
+        lastUpdatedElement.textContent = date.toLocaleDateString('ru-RU');
+        
+        // Update status indicator
+        const statusElement = document.getElementById('update-status');
+        if (statusElement) {
+            const daysSinceUpdate = Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24));
+            let statusClass = 'status-active';
+            let statusText = 'Recent';
+            
+            if (daysSinceUpdate > 7) {
+                statusClass = 'status-warning';
+                statusText = 'Outdated';
+            } else if (daysSinceUpdate > 30) {
+                statusClass = 'status-danger';
+                statusText = 'Very Old';
+            }
+            
+            statusElement.innerHTML = `
+                <span class="status-dot ${statusClass}"></span>
+                <span>${statusText}</span>
+            `;
+        }
+    }
+    
+    // Update stats with game mode specific design
+    if (statsContainer) {
+        statsContainer.innerHTML = stats.map((stat, index) => {
+            const statValue = statValues[index];
+            const tierClass = getTierClassV4(statValue);
+            
+            return `
+                <div class="ascend-stat-row-v4" style="animation-delay: ${index * 0.1}s">
+                    <div class="stat-icon-v4" style="color: ${stat.color}">
+                        <i class="${stat.icon}"></i>
+                        <div class="stat-icon-glow" style="background: ${stat.color}20"></div>
+                    </div>
+                    <div class="stat-content-v4">
+                        <div class="stat-header">
+                            <span class="stat-name-v4">${stat.name}</span>
+                            <div class="stat-info-tooltip" title="${stat.description}">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                        </div>
+                        <div class="stat-bar-container-v4">
+                            <div class="stat-bar-v4">
+                                <div class="stat-fill-v4 ${tierClass}" 
+                                     style="width: ${Math.min(statValue, 100)}%; background: linear-gradient(90deg, ${stat.color}40, ${stat.color})">
+                                    <div class="stat-fill-glow-v4"></div>
+                                    <div class="stat-progress-indicator" style="left: ${Math.min(statValue, 100)}%"></div>
+                                </div>
+                            </div>
+                            <div class="stat-labels">
+                                <span class="stat-tier-v4 ${tierClass}">${getTierFromScore(statValue)}</span>
+                                <span class="stat-score-v4">${statValue}/100</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-trend-v4">
+                        <div class="trend-indicator trend-${Math.random() > 0.5 ? 'up' : 'down'}">
+                            <i class="fas fa-arrow-${Math.random() > 0.5 ? 'up' : 'down'}"></i>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+    
+    // Update overall tier with enhanced color styling
+    const tierBadge = document.getElementById('overall-tier-text-v4');
+    const tierBadgeContainer = document.getElementById('overall-tier-badge-v4');
+    const overallTier = getTierFromScore(avgScore);
+    
+    if (tierBadge && tierBadgeContainer) {
+        tierBadge.textContent = `${overallTier} TIER`;
+        tierBadge.className = `tier-rank-v4 tier-${getTierClassV4(avgScore)}`;
+        tierBadgeContainer.className = `ascend-tier-badge-v4 tier-${getTierClassV4(avgScore)}`;
+        
+        // Trigger tier update animation
+        tierBadgeContainer.classList.add('tier-updated');
+        setTimeout(() => tierBadgeContainer.classList.remove('tier-updated'), 1000);
+    }
+    
+    // Update rank progress
+    const progressElement = document.getElementById('rank-progress');
+    if (progressElement) {
+        const progress = calculateRankProgress(avgScore);
+        progressElement.style.width = `${progress}%`;
+    }
+    
+    // Update comment
+    if (commentElement) {
+        const comment = ascendData.comment || generateDefaultComment(gameMode, avgScore);
+        commentElement.innerHTML = `<p>${comment}</p>`;
+        commentElement.classList.add('typewriter-effect');
+    }
+    
+    // Update evaluator
+    if (evaluatorElement) {
+        evaluatorElement.textContent = ascendData.evaluator_name || 'Elite Squad AI';
+    }
+    
+    // Update performance tags
+    const tagsElement = document.getElementById('performance-tags');
+    if (tagsElement) {
+        const tags = generatePerformanceTagsV4(stats, statValues, gameMode);
+        tagsElement.innerHTML = tags.map(tag => 
+            `<span class="performance-tag tag-${tag.type}">${tag.text}</span>`
+        ).join('');
+    }
+    
+    // Update evaluation rating
+    const ratingElement = document.getElementById('evaluation-rating');
+    if (ratingElement) {
+        const rating = Math.max(1, Math.min(5, Math.floor(avgScore / 20) + 1));
+        updateStarRating(ratingElement, rating);
+    }
+    
+    // Update tier timeline
+    updateTierTimelineV4(overallTier, ascendData.previous_tier);
+    
+    // Add entry animations
+    setTimeout(() => {
+        const statRows = document.querySelectorAll('.ascend-stat-row-v4');
+        statRows.forEach((row, index) => {
+            setTimeout(() => {
+                row.classList.add('animate-in-v4');
+            }, index * 150);
+        });
+    }, 100);
+}
+
+function getStatValuesForGameMode(ascendData, gameMode) {
+    // Return appropriate stat values based on game mode
+    // For now, using the existing bedwars stats as baseline
+    return [
+        ascendData.pvp_score || 25,
+        ascendData.clutching_score || 25,
+        ascendData.block_placement_score || 25,
+        ascendData.gamesense_score || 25
+    ];
+}
+
+function getTierFromScore(score) {
+    if (score >= 95) return 'S+';
+    if (score >= 90) return 'S';
+    if (score >= 85) return 'A+';
+    if (score >= 80) return 'A';
+    if (score >= 75) return 'B+';
+    if (score >= 70) return 'B';
+    if (score >= 65) return 'C+';
+    if (score >= 60) return 'C';
+    return 'D';
+}
+
+function getTierClassV4(scoreOrTier) {
+    let tier = typeof scoreOrTier === 'number' ? getTierFromScore(scoreOrTier) : scoreOrTier;
+    const tierMap = {
+        'S+': 's-plus',
+        'S': 's',
+        'A+': 'a-plus',
+        'A': 'a',
+        'B+': 'b-plus',
+        'B': 'b',
+        'C+': 'c-plus',
+        'C': 'c',
+        'D': 'd'
+    };
+    return tierMap[tier] || 'd';
+}
+
+function calculateGlobalRank(avgScore) {
+    // Mock calculation - in real implementation, this would query database
+    return Math.floor(10000 - (avgScore * 100)) + Math.floor(Math.random() * 50);
+}
+
+function getRankClass(rank) {
+    if (rank <= 100) return 'top-100';
+    if (rank <= 500) return 'top-500';
+    if (rank <= 1000) return 'top-1k';
+    if (rank <= 5000) return 'top-5k';
+    return 'normal';
+}
+
+function calculateTrend(ascendData) {
+    // Mock trend calculation
+    return Math.floor(Math.random() * 20) - 10;
+}
+
+function calculateRankChange(ascendData) {
+    // Mock rank change calculation
+    return Math.floor(Math.random() * 100) - 50;
+}
+
+function calculateRankProgress(avgScore) {
+    const nextTierThreshold = Math.ceil(avgScore / 10) * 10;
+    const prevTierThreshold = Math.floor(avgScore / 10) * 10;
+    return ((avgScore - prevTierThreshold) / (nextTierThreshold - prevTierThreshold)) * 100;
+}
+
+function generateDefaultComment(gameMode, avgScore) {
+    const modeConfig = GAME_MODE_CONFIGS[gameMode];
+    const tier = getTierFromScore(avgScore);
+    
+    const comments = {
+        'S+': `Exceptional ${modeConfig.name} performance! Dominating all aspects with near-perfect execution.`,
+        'S': `Outstanding ${modeConfig.name} skills! Consistently strong across all categories.`,
+        'A+': `Very strong ${modeConfig.name} player with excellent fundamentals and execution.`,
+        'A': `Solid ${modeConfig.name} performance with good technical skills and game awareness.`,
+        'B+': `Above average ${modeConfig.name} player showing promising development.`,
+        'B': `Decent ${modeConfig.name} skills with room for improvement in key areas.`,
+        'C+': `Developing ${modeConfig.name} player with some strengths to build upon.`,
+        'C': `Basic ${modeConfig.name} understanding with significant areas for improvement.`,
+        'D': `Beginning ${modeConfig.name} player who needs focused practice and development.`
+    };
+    
+    return comments[tier] || comments['D'];
+}
+
+function generatePerformanceTagsV4(stats, values, gameMode) {
+    const tags = [];
+    const avgScore = values.reduce((sum, val) => sum + val, 0) / values.length;
+    
+    // Overall performance tag
+    if (avgScore > 80) {
+        tags.push({ type: 'strength', text: `Elite ${GAME_MODE_CONFIGS[gameMode].name}` });
+    } else if (avgScore > 60) {
+        tags.push({ type: 'neutral', text: 'Solid Performer' });
+    } else {
+        tags.push({ type: 'weakness', text: 'Developing Skills' });
+    }
+    
+    // Find strongest and weakest stats
+    const maxIndex = values.indexOf(Math.max(...values));
+    const minIndex = values.indexOf(Math.min(...values));
+    
+    if (values[maxIndex] > 70) {
+        tags.push({ type: 'strength', text: `Strong: ${stats[maxIndex].name}` });
+    }
+    
+    if (values[minIndex] < 50) {
+        tags.push({ type: 'weakness', text: `Focus: ${stats[minIndex].name}` });
+    }
+    
+    return tags.slice(0, 3);
+}
+
+function showDefaultASCENDDataV4(gameMode = 'bedwars') {
+    console.log('🎯 Showing default ASCEND v4.0 data for mode:', gameMode);
+    const defaultData = {
+        pvp_tier: 'D',
+        pvp_score: 25,
+        clutching_tier: 'D',
+        clutching_score: 25,
+        block_placement_tier: 'D',
+        block_placement_score: 25,
+        gamesense_tier: 'D',
+        gamesense_score: 25,
+        overall_tier: 'D',
+        comment: generateDefaultComment(gameMode, 25),
+        evaluator_name: 'Elite Squad AI',
+        previous_tier: null
+    };
+    
+    updateASCENDCardV4(defaultData, gameMode);
+}
+
+function showASCENDHistoryV4() {
+    const modal = new bootstrap.Modal(document.getElementById('ascendHistoryModalV4'));
+    modal.show();
+    loadASCENDHistoryV4();
+}
+
+function loadASCENDHistoryV4() {
+    const historyContent = document.getElementById('ascendHistoryContentV4');
+    if (historyContent) {
+        // Enhanced history with more detailed data
+        historyContent.innerHTML = `
+            <div class="timeline-v4">
+                <div class="timeline-item-v4 improvement">
+                    <div class="timeline-marker improvement"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <span class="timeline-date">2024-01-15 14:30</span>
+                            <span class="timeline-change tier-improvement">D → C+</span>
+                            <span class="timeline-mode">Bedwars</span>
+                        </div>
+                        <p>Major breakthrough in PVP and clutching performance. Excellent improvement in game awareness.</p>
+                        <div class="timeline-stats">
+                            <div class="stat-change positive">PVP: 25 → 40 (+15)</div>
+                            <div class="stat-change positive">Clutching: 22 → 38 (+16)</div>
+                            <div class="stat-change positive">GameSense: 20 → 35 (+15)</div>
+                            <div class="stat-change neutral">Blocks: 30 → 32 (+2)</div>
+                        </div>
+                        <div class="timeline-rank">
+                            <span class="rank-change">Global Rank: #2,847 → #1,923 (+924)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item-v4 stable">
+                    <div class="timeline-marker stable"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <span class="timeline-date">2024-01-08 16:15</span>
+                            <span class="timeline-change tier-stable">C+ → C+</span>
+                            <span class="timeline-mode">Bedwars</span>
+                        </div>
+                        <p>Consistent performance maintained. Minor improvements in block placement technique.</p>
+                        <div class="timeline-stats">
+                            <div class="stat-change neutral">PVP: 25 → 25 (0)</div>
+                            <div class="stat-change neutral">Clutching: 22 → 22 (0)</div>
+                            <div class="stat-change positive">Blocks: 28 → 30 (+2)</div>
+                            <div class="stat-change neutral">GameSense: 20 → 20 (0)</div>
+                        </div>
+                        <div class="timeline-rank">
+                            <span class="rank-change neutral">Global Rank: #2,891 → #2,847 (+44)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item-v4 decline">
+                    <div class="timeline-marker decline"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <span class="timeline-date">2024-01-01 12:00</span>
+                            <span class="timeline-change tier-decline">B- → C+</span>
+                            <span class="timeline-mode">Bedwars</span>
+                        </div>
+                        <p>Temporary decline due to meta adaptation issues. Focus needed on new strategies.</p>
+                        <div class="timeline-stats">
+                            <div class="stat-change negative">PVP: 35 → 25 (-10)</div>
+                            <div class="stat-change negative">Clutching: 30 → 22 (-8)</div>
+                            <div class="stat-change neutral">Blocks: 28 → 28 (0)</div>
+                            <div class="stat-change negative">GameSense: 25 → 20 (-5)</div>
+                        </div>
+                        <div class="timeline-rank">
+                            <span class="rank-change negative">Global Rank: #2,156 → #2,891 (-735)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+    
+    // Update filter stats
+    document.getElementById('history-count').textContent = '12';
+    document.getElementById('avg-improvement').textContent = '+3.2';
+    document.getElementById('peak-rank').textContent = 'Peak: B+';
+}
+
+function updateStarRating(element, rating) {
+    const starsContainer = element.querySelector('.stars');
+    const ratingText = element.querySelector('.rating-text');
+    
+    if (starsContainer && ratingText) {
+        const stars = starsContainer.querySelectorAll('i');
+        stars.forEach((star, index) => {
+            if (index < rating) {
+                star.className = 'fas fa-star';
+            } else {
+                star.className = 'far fa-star';
+            }
+        });
+        ratingText.textContent = `${rating}.0/5.0`;
+    }
+}
+
+function updateTierTimelineV4(currentTier, previousTier) {
+    const timeline = document.getElementById('tier-timeline');
+    if (timeline) {
+        const tiers = ['D', 'C', 'C+', 'B', 'B+', 'A', 'A+', 'S', 'S+'];
+        const currentIndex = tiers.indexOf(currentTier);
+        const previousIndex = previousTier ? tiers.indexOf(previousTier) : currentIndex;
+        
+        timeline.innerHTML = `
+            <div class="tier-point current" data-tier="${currentTier}" title="Current Tier">${currentTier}</div>
+            <div class="tier-line ${currentIndex > previousIndex ? 'improvement' : currentIndex < previousIndex ? 'decline' : 'stable'}"></div>
+            <div class="tier-point previous" data-tier="${previousTier || currentTier}" title="Previous Tier">${previousTier || '–'}</div>
+        `;
+    }
+}
+
+function initializeViewToggleV4() {
+    const viewButtons = document.querySelectorAll('.view-btn');
+    const detailedView = document.getElementById('ascend-stats-container-v4');
+    const radarView = document.getElementById('ascend-radar-container');
+    
+    viewButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            viewButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            const view = btn.dataset.view;
+            if (view === 'detailed') {
+                detailedView.style.display = 'block';
+                radarView.style.display = 'none';
+            } else if (view === 'radar') {
+                detailedView.style.display = 'none';
+                radarView.style.display = 'block';
+                setTimeout(() => initializeRadarChartV4([]), 100);
+            }
+        });
+    });
+}
+
+function initializeRadarChartV4(stats) {
+    const container = document.getElementById('ascend-radar-container');
+    if (!container) return;
+    
+    container.innerHTML = `
+        <div class="radar-placeholder-v4">
+            <div class="radar-grid-v4">
+                <div class="radar-axis" style="transform: rotate(0deg)"></div>
+                <div class="radar-axis" style="transform: rotate(90deg)"></div>
+                <div class="radar-axis" style="transform: rotate(45deg)"></div>
+                <div class="radar-axis" style="transform: rotate(135deg)"></div>
+            </div>
+            <div class="radar-labels-v4">
+                <span class="radar-label radar-label-top">Skill 1</span>
+                <span class="radar-label radar-label-right">Skill 2</span>
+                <span class="radar-label radar-label-bottom">Skill 3</span>
+                <span class="radar-label radar-label-left">Skill 4</span>
+            </div>
+            <p class="text-muted text-center mt-3">Advanced radar visualization coming in future updates</p>
+        </div>
+    `;
+}
+
+function initializeTooltipsV4() {
+    if (typeof bootstrap !== 'undefined') {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[title]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    }
+}
+
+function exportASCENDData() {
+    const data = {
+        player: '{{ player.nickname }}',
+        evaluation_date: new Date().toISOString(),
+        version: 'v4.0',
+        game_mode: document.getElementById('gamemode-select').value,
+        overall_tier: document.getElementById('overall-tier-text-v4').textContent,
+        average_score: document.getElementById('average-score-v4').textContent,
+        global_rank: document.getElementById('global-rank-v4').textContent
+    };
+    
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `ascend_v4_data_{{ player.nickname }}_${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+function editASCENDDataV4() {
+    if (typeof window.editASCENDData === 'function') {
+        window.editASCENDData();
+    } else {
+        const adminSection = document.querySelector('.ascend-editor-v4');
+        if (adminSection) {
+            adminSection.scrollIntoView({ behavior: 'smooth' });
+            adminSection.classList.add('highlight-editor');
+            setTimeout(() => adminSection.classList.remove('highlight-editor'), 2000);
+        }
+    }
+}
+
+// Make functions globally available
+window.reloadASCENDDataV4 = function(playerId) {
+    const gameMode = document.getElementById('gamemode-select').value;
+    loadASCENDDataV4(playerId, gameMode);
+};
+
+window.updateASCENDCardV4 = updateASCENDCardV4;
+</script>
+
+<style>
+/* ASCEND v4.0 Enhanced Styles */
+.ascend-performance-card-v4 {
+    background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #1e3c72 100%);
+    border-radius: 28px;
+    padding: 3rem;
+    color: white;
+    max-width: 950px;
+    margin: 0 auto;
+    box-shadow: 
+        0 30px 60px rgba(0,0,0,0.6),
+        inset 0 1px 0 rgba(255,255,255,0.1),
+        0 0 0 1px rgba(255, 193, 7, 0.3);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(15px);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+.ascend-performance-card-v4::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 8px;
+    background: linear-gradient(90deg, #ff6b6b 0%, #feca57 20%, #48dbfb 40%, #0abde3 60%, #54a0ff 80%, #5f27cd 100%);
+    animation: gradientFlowV4 5s ease-in-out infinite;
+}
+
+.ascend-performance-card-v4::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(255, 193, 7, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(72, 219, 251, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(84, 160, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 60% 70%, rgba(95, 39, 205, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+/* Enhanced Game Mode Selector */
+.gamemode-selector {
+    margin-top: 0.5rem;
+}
+
+.gamemode-select-input {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.gamemode-select-input:focus {
+    background: rgba(255,255,255,0.15);
+    border-color: #48dbfb;
+    box-shadow: 0 0 0 0.2rem rgba(72, 219, 251, 0.25);
+}
+
+.gamemode-select-input option {
+    background: #1a1a2e;
+    color: white;
+    padding: 0.5rem;
+}
+
+/* Enhanced Header Styles */
+.ascend-header-v4 {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+    gap: 2rem;
+    position: relative;
+    z-index: 3;
+}
+
+.ascend-player-info-v4 {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.ascend-avatar-container-v4 {
+    position: relative;
+}
+
+.ascend-avatar-v4 {
+    width: 110px;
+    height: 110px;
+    border-radius: 22px;
+    image-rendering: pixelated;
+    border: 4px solid rgba(255, 193, 7, 0.5);
+    transition: all 0.4s ease;
+    z-index: 2;
+    position: relative;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+}
+
+.ascend-avatar-v4:hover {
+    transform: scale(1.05) rotate(2deg);
+    border-color: rgba(255, 193, 7, 0.9);
+    box-shadow: 0 20px 45px rgba(0,0,0,0.7);
+}
+
+.ascend-avatar-glow-v4 {
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    background: radial-gradient(circle, rgba(255, 193, 7, 0.5) 0%, transparent 70%);
+    border-radius: 30px;
+    filter: blur(20px);
+    animation: avatarPulseV4 4s ease-in-out infinite alternate;
+}
+
+.ascend-level-badge {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    background: linear-gradient(135deg, #ffc107, #ff9800, #f57c00);
+    color: #000;
+    font-size: 0.9rem;
+    font-weight: 900;
+    padding: 0.4rem 0.8rem;
+    border-radius: 14px;
+    border: 3px solid rgba(255,255,255,0.2);
+    box-shadow: 0 6px 20px rgba(255, 193, 7, 0.5);
+    z-index: 4;
+}
+
+.ascend-player-details-v4 h3 {
+    font-size: 2.8rem;
+    font-weight: 900;
+    margin: 0 0 1.2rem 0;
+    text-shadow: 3px 3px 10px rgba(0,0,0,0.8);
+    background: linear-gradient(135deg, #fff, #f0f0f0, #e0e0e0, #d0d0d0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+}
+
+/* Enhanced Tier Badge with Color Focus */
+.ascend-tier-badge-v4 {
+    margin-bottom: 1.2rem;
+    position: relative;
+    display: inline-block;
+    transition: all 0.4s ease;
+    padding: 0.8rem 1.8rem;
+    border-radius: 18px;
+    border: 2px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.05);
+}
+
+.tier-rank-v4 {
+    font-size: 1.6rem;
+    font-weight: 900;
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    position: relative;
+    z-index: 2;
+    transition: all 0.3s ease;
+}
+
+/* Tier Color System - Focus on Text and Numbers */
+.tier-s-plus { color: #ff1744; text-shadow: 0 0 15px #ff1744; }
+.tier-s { color: #ff5722; text-shadow: 0 0 15px #ff5722; }
+.tier-a-plus { color: #ff9800; text-shadow: 0 0 15px #ff9800; }
+.tier-a { color: #ffc107; text-shadow: 0 0 15px #ffc107; }
+.tier-b-plus { color: #4caf50; text-shadow: 0 0 15px #4caf50; }
+.tier-b { color: #2196f3; text-shadow: 0 0 15px #2196f3; }
+.tier-c-plus { color: #9c27b0; text-shadow: 0 0 15px #9c27b0; }
+.tier-c { color: #607d8b; text-shadow: 0 0 15px #607d8b; }
+.tier-d { color: #795548; text-shadow: 0 0 15px #795548; }
+
+.ascend-tier-badge-v4.tier-updated {
+    animation: tierUpdateAnimationV4 1.2s ease-out;
+}
+
+/* Enhanced Summary with Global Rank */
+.ascend-summary-v4 {
+    display: flex;
+    flex-direction: column;
+    gap: 1.8rem;
+    text-align: right;
+}
+
+.summary-item-v4 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    position: relative;
+    padding: 1.2rem;
+    background: rgba(255,255,255,0.06);
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.15);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.summary-item-v4:hover {
+    background: rgba(255,255,255,0.1);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+.summary-icon {
+    position: absolute;
+    top: 0.6rem;
+    left: 0.6rem;
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #48dbfb, #0abde3);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1rem;
+    box-shadow: 0 4px 15px rgba(72, 219, 251, 0.3);
+}
+
+.summary-value {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #fff;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+    margin-bottom: 0.3rem;
+}
+
+/* Global Rank Styling */
+.rank-top-100 { color: #ff1744; text-shadow: 0 0 10px #ff1744; }
+.rank-top-500 { color: #ff5722; text-shadow: 0 0 10px #ff5722; }
+.rank-top-1k { color: #ff9800; text-shadow: 0 0 10px #ff9800; }
+.rank-top-5k { color: #ffc107; text-shadow: 0 0 10px #ffc107; }
+.rank-normal { color: #90a4ae; }
+
+/* Enhanced Stats Section */
+.ascend-stats-section-v4 {
+    margin-bottom: 3rem;
+    position: relative;
+    z-index: 2;
+}
+
+.stats-header h4 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #fff;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+.ascend-stats-grid-v4 {
+    display: flex;
+    flex-direction: column;
+    gap: 1.8rem;
+}
+
+.ascend-stat-row-v4 {
+    display: flex;
+    align-items: center;
+    padding: 1.8rem;
+    background: rgba(255,255,255,0.05);
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.4s ease;
+    opacity: 0;
+    transform: translateY(30px);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+}
+
+.ascend-stat-row-v4::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+    transition: left 0.6s ease;
+}
+
+.ascend-stat-row-v4:hover::before {
+    left: 100%;
+}
+
+.ascend-stat-row-v4:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255, 193, 7, 0.4);
+    transform: translateY(-4px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+}
+
+.ascend-stat-row-v4.animate-in-v4 {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.stat-icon-v4 {
+    width: 65px;
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    border-radius: 14px;
+    position: relative;
+    margin-right: 1.8rem;
+    flex-shrink: 0;
+    background: rgba(255,255,255,0.05);
+    border: 2px solid rgba(255,255,255,0.1);
+}
+
+.stat-content-v4 {
+    flex: 1;
+}
+
+.stat-name-v4 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: rgba(255,255,255,0.95);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+.stat-bar-container-v4 {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-top: 1rem;
+}
+
+.stat-bar-v4 {
+    height: 20px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(255,255,255,0.15);
+}
+
+.stat-fill-v4 {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-fill-glow-v4 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    animation: statFillGlowV4 3s ease-in-out infinite;
+}
+
+.stat-labels {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stat-tier-v4 {
+    font-size: 1rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    padding: 0.3rem 0.8rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.05);
+}
+
+.stat-score-v4 {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.9);
+    font-weight: 700;
+}
+
+/* Enhanced Comment Section */
+.ascend-comment-section-v4 {
+    background: rgba(255,255,255,0.07);
+    border-radius: 22px;
+    padding: 2.8rem;
+    margin-bottom: 3rem;
+    border-left: 8px solid #48dbfb;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+}
+
+/* Enhanced Footer */
+.ascend-footer-v4 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+    gap: 2rem;
+    padding: 2.5rem;
+    background: rgba(255,255,255,0.04);
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+}
+
+/* Enhanced Branding */
+.ascend-branding-v4 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 2rem;
+    border-top: 2px solid rgba(255,255,255,0.15);
+    position: relative;
+}
+
+.logo-circle-v4 {
+    width: 55px;
+    height: 55px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #667eea 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    color: white;
+    font-weight: bold;
+    position: relative;
+    animation: logoRotateV4 12s linear infinite;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.version-badge.version-major {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 900;
+    padding: 0.25rem 0.6rem;
+    border-radius: 5px;
+    text-transform: uppercase;
+    animation: majorBadgePulse 2.5s ease-in-out infinite;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+}
+
+/* Enhanced Timeline Styles */
+.timeline-v4 {
+    position: relative;
+    padding-left: 3rem;
+}
+
+.timeline-v4::before {
+    content: '';
+    position: absolute;
+    left: 1.5rem;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(to bottom, #48dbfb, rgba(72, 219, 251, 0.3));
+    border-radius: 2px;
+}
+
+.timeline-item-v4 {
+    position: relative;
+    margin-bottom: 3rem;
+    background: rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 2rem;
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.timeline-item-v4:hover {
+    background: rgba(255,255,255,0.08);
+    transform: translateX(10px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.timeline-marker {
+    position: absolute;
+    left: -3.8rem;
+    top: 2rem;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 4px solid #0f0f1e;
+    z-index: 2;
+}
+
+.timeline-marker.improvement {
+    background: #28a745;
+    box-shadow: 0 0 20px rgba(40, 167, 69, 0.6);
+}
+
+.timeline-marker.stable {
+    background: #ffc107;
+    box-shadow: 0 0 20px rgba(255, 193, 7, 0.6);
+}
+
+.timeline-marker.decline {
+    background: #dc3545;
+    box-shadow: 0 0 20px rgba(220, 53, 69, 0.6);
+}
+
+.timeline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.timeline-date {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.7);
+    font-weight: 600;
+}
+
+.timeline-mode {
+    background: rgba(72, 219, 251, 0.2);
+    color: #48dbfb;
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.timeline-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.stat-change {
+    font-size: 0.85rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 8px;
+    font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.stat-change.positive {
+    background: rgba(40, 167, 69, 0.2);
+    color: #28a745;
+    border-color: rgba(40, 167, 69, 0.3);
+}
+
+.stat-change.negative {
+    background: rgba(220, 53, 69, 0.2);
+    color: #dc3545;
+    border-color: rgba(220, 53, 69, 0.3);
+}
+
+.stat-change.neutral {
+    background: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+    border-color: rgba(255, 193, 7, 0.3);
+}
+
+.timeline-rank {
+    margin-top: 1rem;
+    padding: 0.8rem;
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px;
+    border-left: 4px solid #48dbfb;
+}
+
+.rank-change {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+}
+
+.rank-change.neutral {
+    color: #ffc107;
+}
+
+.rank-change.negative {
+    color: #dc3545;
+}
+
+/* Enhanced Animations */
+@keyframes gradientFlowV4 {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+@keyframes avatarPulseV4 {
+    0% { opacity: 0.5; transform: scale(1); }
+    100% { opacity: 0.8; transform: scale(1.08); }
+}
+
+@keyframes tierUpdateAnimationV4 {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.15) rotate(5deg); }
+    100% { transform: scale(1); }
+}
+
+@keyframes statFillGlowV4 {
+    0%, 100% { transform: translateX(-100%); }
+    50% { transform: translateX(100%); }
+}
+
+@keyframes logoRotateV4 {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes majorBadgePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .ascend-performance-card-v4 {
+        padding: 2.5rem;
+        max-width: 100%;
+    }
+    
+    .ascend-header-v4 {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .ascend-summary-v4 {
+        flex-direction: row;
+        justify-content: space-around;
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .ascend-performance-card-v4 {
+        padding: 2rem;
+        margin: 1rem;
+        border-radius: 20px;
+    }
+    
+    .ascend-player-details-v4 h3 {
+        font-size: 2.2rem;
+    }
+    
+    .ascend-stat-row-v4 {
+        padding: 1.5rem;
+    }
+    
+    .timeline-stats {
+        flex-direction: column;
+    }
+}
+</style>
+
